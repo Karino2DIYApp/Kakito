@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     var currentIndex = 0
-    var isKanjiVisible = true
+    var isKanjiVisible = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

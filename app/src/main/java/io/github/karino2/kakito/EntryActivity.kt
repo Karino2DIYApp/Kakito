@@ -1,5 +1,6 @@
 package io.github.karino2.kakito
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -44,12 +45,20 @@ class EntryActivity : AppCompatActivity() {
 
         entries.addAll(Entry.fromLastUri(this))
 
+        val kleeOne = Typeface.createFromAsset(assets, "fonts/KleeOne-Regular.ttf")
+
         adapter = object : ArrayAdapter<Entry>(this, R.layout.list_item_entry, entries) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.list_item_entry, parent, false)
                 val entry = getItem(position)!!
-                view.findViewById<TextView>(R.id.textViewYomi).text = entry.yomi
-                view.findViewById<TextView>(R.id.textViewKanji).text = entry.kanji
+                view.findViewById<TextView>(R.id.textViewYomi).apply {
+                    typeface = kleeOne
+                    text = entry.yomi
+                }
+                view.findViewById<TextView>(R.id.textViewKanji).apply {
+                    typeface = kleeOne
+                    text = entry.kanji
+                }
                 return view
             }
         }

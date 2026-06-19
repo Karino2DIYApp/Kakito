@@ -3,3 +3,7 @@
 漢字が書けなかった時にこれに登録して練習する。
 
 ![screencast](https://raw.githubusercontent.com/Karino2DIYApp/Kakito/refs/heads/main/misc/Kakito_1.gif)
+
+## フォント
+
+本アプリでは、[Klee One](https://github.com/fontworks-fonts/Klee) (SIL Open Font License 1.1) を使用しています。

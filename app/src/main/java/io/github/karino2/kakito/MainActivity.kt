@@ -26,6 +26,7 @@ import com.onyx.android.sdk.pen.data.TouchPointList
 import androidx.core.graphics.createBitmap
 import kotlin.math.abs
 import android.graphics.Path
+import android.graphics.Typeface
 import android.net.Uri
 
 class MainActivity : AppCompatActivity() {
@@ -76,6 +77,11 @@ class MainActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.buttonClear).setOnClickListener {
             clearWriting()
         }
+
+        val kleeOne = Typeface.createFromAsset(assets, "fonts/KleeOne-Regular.ttf")
+        findViewById<TextView>(R.id.textViewYomi).typeface = kleeOne
+        findViewById<TextView>(R.id.textViewKanji).typeface = kleeOne
+
         lastUri ?: return gotoSetup()
 
         reloadEntries()

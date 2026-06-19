@@ -60,6 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setLogo(R.mipmap.ic_launcher)
+            setDisplayUseLogoEnabled(true)
+            setDisplayShowTitleEnabled(false)
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

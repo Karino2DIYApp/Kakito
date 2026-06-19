@@ -27,7 +27,13 @@ class EntryActivity : AppCompatActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.apply {
+            setDisplayShowHomeEnabled(true)
+            setLogo(R.mipmap.ic_launcher)
+            setDisplayUseLogoEnabled(true)
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowTitleEnabled(false)
+        }
         toolbar.setNavigationOnClickListener { finish() }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

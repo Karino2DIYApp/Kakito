@@ -1,5 +1,6 @@
 package io.github.karino2.kakito
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -25,12 +26,29 @@ import com.onyx.android.sdk.pen.data.TouchPointList
 import androidx.core.graphics.createBitmap
 import kotlin.math.abs
 import android.graphics.Path
+import android.net.Uri
 
 class MainActivity : AppCompatActivity() {
-    val entryList = listOf(
-        Entry("とうろく", "登録"),
-        Entry("しゅうしょく(かざりの方）", "修飾")
-    )
+    val lastUri : Uri?
+        get() = Entry.lastUri(this)
+
+    fun gotoSetup()
+    {
+        Intent(this, SetupActivity::class.java)
+            .also { startActivity(it) }
+    }
+
+
+    private var entryList = mutableListOf<Entry>()
+
+    private fun reloadEntries() {
+        entryList.clear()
+        entryList.addAll(Entry.fromLastUri(this).reversed())
+        if (currentIndex >= entryList.size) {
+            currentIndex = if (entryList.isEmpty()) 0 else entryList.size - 1
+        }
+        updateUI()
+    }
 
     var currentIndex = 0
     var isKanjiVisible = true
@@ -52,8 +70,9 @@ class MainActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.buttonClear).setOnClickListener {
             clearWriting()
         }
+        lastUri ?: return gotoSetup()
 
-        updateUI()
+        reloadEntries()
         touchHelper
     }
 
@@ -96,11 +115,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 true
             }
+            R.id.action_edit_entries -> {
+                Intent(this, EntryActivity::class.java)
+                    .also { startActivity(it) }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun updateUI() {
+        if (entryList.isEmpty()) {
+            findViewById<TextView>(R.id.textViewYomi).text = ""
+            findViewById<TextView>(R.id.textViewKanji).text = ""
+            return
+        }
         withTempNoRawRendering {
             val entry = entryList[currentIndex]
             findViewById<TextView>(R.id.textViewYomi).text = entry.yomi
@@ -170,8 +199,12 @@ class MainActivity : AppCompatActivity() {
         override fun surfaceCreated(holder: SurfaceHolder) {
             applyRawDrawingSettings()
         }
-        override fun surfaceChanged(h: SurfaceHolder, f: Int, w: Int, height: Int) {}
-        override fun surfaceDestroyed(holder: SurfaceHolder) {}
+        override fun surfaceChanged(h: SurfaceHolder, f: Int, w: Int, height: Int) {
+            applyRawDrawingSettings()
+        }
+        override fun surfaceDestroyed(holder: SurfaceHolder) {
+            ensureCloseRawRendering()
+        }
     }
 
     private val touchHelper by lazy {
@@ -291,6 +324,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        reloadEntries()
         applyRawDrawingSettings()
     }
 
